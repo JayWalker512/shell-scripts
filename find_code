@@ -1,0 +1,8 @@
+#!/bin/bash
+#parameters: #file_type, #string
+if [ "$#" -ne 2 ]; then
+	echo "Recursively searches for matching strings inside files of the specified type in your current directory and subdirectories."
+	echo "Usage: find_code \"*.someextension\" \"some string\""
+else
+	grep -inIEr --color=ALWAYS --include="$1" "$2" .
+fi
