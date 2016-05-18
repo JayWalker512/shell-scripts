@@ -1,0 +1,49 @@
+#!/bin/bash
+#md5 verifies a file based on it's .md5 sidecar file. return 0 == passed.
+
+md5v()
+{
+    target="$1"
+    targetNameLength=${#target}
+    let targetNameLength-=4
+    targetExtension=${target:targetNameLength:4}
+
+    controlChecksum=0 #checksum in sidecar file
+    testChecksumTarget=0 #file to create checksum from
+    if [ "$targetExtension" == ".md5" ]; then
+	    controlChecksum=$(cat "$target")
+	    controlChecksum=${controlChecksum:0:32}
+	    testChecksumTarget=${target:0:targetNameLength}
+    else
+	    controlChecksum=$(cat "$target.md5")
+	    controlChecksum=${controlChecksum:0:32}
+	    testChecksumTarget="$target"
+    fi
+
+    testChecksum=0 #checksum of file we're verifying
+    if [ -e "$testChecksumTarget" ] && [ "$controlChecksum" != "" ]; then
+	    testChecksumString=$(md5sum "$testChecksumTarget")
+	    testChecksum=${testChecksumString:0:32}
+	    if [ "$controlChecksum" == "$testChecksum" ]; then
+		    echo "Control: $controlChecksum"
+		    echo "Test   : $testChecksum"
+		    echo "$testChecksumTarget passed verification!"
+		    return 0;
+	    else
+		    echo "Control: $controlChecksum"
+		    echo "Test   : $testChecksum"
+		    echo "$testChecksumTarget FAILED verification!"
+		    return 1;
+	    fi
+    else
+	    echo "Sidecar or target file missing or unreadable."
+    fi
+}
+
+if [ "$#" -ne 1 ]; then
+    echo "md5v: Verifies an MD5 side-car file for the file specified."
+    echo "Usage: md5v somefilehere"
+    echo "OR: md5v somefilehere.md5"
+else
+    md5v "$1"
+fi

@@ -1,0 +1,17 @@
+#!/bin/bash
+
+md5sc()
+{
+    target="$1"
+    checksumString=$(md5sum "$target")
+    checksum=${checksumString:0:32}
+    echo "$checksum" > "$target.md5"
+    echo "$checksum $target"
+}
+
+if [ "$#" -ne 1 ]; then
+    echo "md5sc: Creates an MD5 side-car file for the file specified."
+    echo "Usage: md5sc somefilehere"
+else
+    md5sc "$1"
+fi
