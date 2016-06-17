@@ -1,0 +1,11 @@
+#!/bin/bash
+
+mkdir mp3
+mkdir ogg
+
+for i in *.wav;
+	do name="${i%.*}"
+  echo "Converting $name";
+  ffmpeg -i "$i" -acodec mp3 -b:a 320000 -y ./mp3/"$name".mp3;
+  ffmpeg -i "$i" -acodec vorbis -b:a 320000 -strict -2 -y ./ogg/"$name".ogg;
+done

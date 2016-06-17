@@ -1,0 +1,94 @@
+#!/bin/bash
+#modified by Ruja
+#original script by kennethadammiller
+#http://ubuntuforums.org/showthread.php?t=1378108
+
+#option "t" sets the timeout time between changing wallpapers
+#option "s" sets the setting for when the image is applied as wallpaper
+#after these options, place the locations for each of your folders that you
+#want to be scanned for wallpapers to be cycled through
+
+#you can save the code to ~/.wallpaperChanger, then open
+#"Startup Applications" and add a task with the command:
+#
+#  /home/userName/.wallpaperChanger -t 3600 -s stretched "/path/to/wallpapers1"
+#  "/path/to/wallpapers2" "/path/to/wallpapers3" ...
+
+#if launched with -t 0, changes wallpaper once, then exits
+
+a=1
+b=1
+
+while getopts ":t:s:" opt;      #get the command line arguments so that 
+do                              #it can set the amount of time to sleep for
+  case $opt in
+        t)
+        time=$OPTARG
+        a=0
+        ;;
+        s)
+        setting=$OPTARG
+        b=0
+        ;;
+  esac
+done
+
+if [ $a = 0 ];  #so yea i guess i couldn't figure out how to get it to work 
+  then          #in the opt-while loop above. oh well. it works now.
+  shift 2
+fi
+if [ $b = 0 ];
+  then
+  shift 2
+fi
+
+time=${time:=3600}              #set time to default if the user didn't specify
+setting=${setting:=stretch}     #set setting to default of stretched if user doesn't specify
+newline='
+'                               #$newline variable is easier :)
+
+##change to each of the directories that contain wallpapers
+#and add what's in those directories 
+##to a newline delimited list
+wallpapers=""
+while [ "$1" != "" ];
+do
+	cd "$1"
+		for var in {*.jpg,*.png,*.JPG,*.PNG}     #match jpg and png extensions
+		do
+			if [ -f "$1/$var" ] && [ -r "$1/$var" ];
+			then
+				if [ "$var" != '*.jpg' ] && #if there is no match for the file type 
+				   [ "$var" != '*.png' ] && #in the directory, skip it so that it doesn't
+				   [ "$var" != '*.JPG' ] && #cause problems when it goes to change to them
+				   [ "$var" != '*.PNG' ];
+				then
+					wallpapers="$wallpapers$1/$var$newline"
+				fi
+			fi
+		done
+	shift
+done
+count=$(echo "$wallpapers" | wc -l)
+#finished adding wallpapers up into newline delimited variable
+
+#get a random $current to select from $wallpapers
+repeat=1
+while [ $repeat = 1 ];
+do
+	current=$(($RANDOM % $count)) #random number between 0 and $count-1
+	if [ $current -gt 0 ];        #number cannot be 0, if it is just try again
+	then
+		tempwallpaper="$(echo "$wallpapers" | head -n $current | tail -n 1)"
+		gsettings set org.gnome.desktop.background picture-uri file://"$tempwallpaper"
+		
+		if [ $time != 0 ];
+		then
+			sleep $time
+		else
+			repeat=0
+		fi
+	fi
+done
+#end
+}

@@ -7,4 +7,5 @@ Dependencies
 md5sum
 gzip
 grep
+ffmpeg
 

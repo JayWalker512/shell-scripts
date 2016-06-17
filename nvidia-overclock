@@ -1,0 +1,8 @@
+#!/bin/bash
+
+#this will set overclocking settings for nvidia gpu
+nvidia-settings -a GPUOverclockingState=1 #enable overclocking
+nvidia-settings -a GPU3DClockFreqs=600,900 #set clocks (default: 550,900)
+
+
+

@@ -1,0 +1,6 @@
+#!/bin/bash
+for i in *.wav;
+  do name=`echo "$i" | cut -d'.' -f1`;
+  echo "Converting $name";
+  ffmpeg -i "$i" -acodec flac ./flac/"$name".flac;
+done
