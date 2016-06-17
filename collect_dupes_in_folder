@@ -1,0 +1,15 @@
+#!/bin/bash
+#this script will find duplicate files in a folder by comparing their checksums
+
+path="$1"
+folderName=$(basename "$path")
+pid="$$"
+tempFile="/var/tmp/$pid-$folderName-sums.txt"
+
+echo "path = $path"
+echo "folderName = $folderName"
+echo "pid = $$"
+echo "tempFile = $tempFile"
+
+find "$path" -maxdepth 1 -type f -exec md5sum {} \; > "$tempFile"
+sort "$tempFile" > "$tempFile-sorted"
