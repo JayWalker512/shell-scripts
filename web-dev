@@ -1,0 +1,11 @@
+#!/bin/bash
+#script for power saving on my laptop. No need to run these services when I'm not using them.
+#Used 'systemctl disable soandso' to disable start on boot. 'enable' reverts.
+
+if [ "$1" == "start" ]; then
+	sudo service mysql start
+	sudo service apache2 start
+elif [ "$1" == "stop" ]; then
+	sudo service mysql stop
+	sudo service apache2 stop
+fi
