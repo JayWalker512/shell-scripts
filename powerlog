@@ -1,0 +1,2 @@
+#!/bin/bash
+watch -n 1 "apcaccess status | grep LOADPCT | awk '{ print \$3 }' | tee -a ~/Desktop/powerlog.txt"
