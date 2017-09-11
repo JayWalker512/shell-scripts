@@ -1,5 +1,9 @@
 #!/bin/bash
 
+#could do md5 and gzip in parallel with
+#cat powerlog.txt | tee >(md5sum > powerlog.txt.md5) >(gzip -9cv > powerlog.txt.gz)
+
+
 md5sc()
 {
     local target="$1"
