@@ -1,0 +1,10 @@
+#!/bin/sh
+
+if [ $# -ne 1 ]; then
+	echo "Please specify an image to mount!"
+	exit
+fi
+
+loopDev=$(losetup -f)
+sudo losetup "$loopDev" $1
+sudo partprobe "$loopDev"
