@@ -17,7 +17,18 @@ if [ "$#" -ne 1 ]; then
     echo "gzipit: Creates a gzip file from the file specified, after first creating an MD5 side-car file from the file specified."
     echo "Usage: gzipit somefilehere"
 else
-    md5sc "$1"
-    gzip -9cv --rsyncable "$1" > "$1".gz
+    silence=$(which pigz)
+    hasPigz="$?"
+    if [ "$hasPigz" -eq 0 ]; then #if have pigz...
+        echo "Compressing with pigz..."
+        cat "${1}" | tee >(md5sum > "${target}.md5") | pigz -9cv --rsyncable > "${1}.gz"
+    else
+        echo "Compressing with gzip..."
+        cat "${1}" | tee >(md5sum > "${target}.md5") | gzip -9cv --rsyncable > "${1}.gz"
+    fi
+    checksumString=$(cat "${1}.md5")
+    checksum=${checksumString:0:32}
+    echo "$checksum" > "${1}.md5"
+    echo "$checksum $1"
 fi
 
