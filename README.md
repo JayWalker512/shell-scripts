@@ -11,7 +11,7 @@ Docs
 ----
 
 # gzipit \<file>
-Uses gzip to compress `file` to `file.gz`, and generates a sidecar checksum file using MD5 algorithm titled `file.md5`.
+Uses gzip (or pigz, if available) to compress `file` to `file.gz`, and generates a sidecar checksum file using MD5 algorithm titled `file.md5`.
 
 # md5sc \<file>
 Creates an MD5 checksum sidecar file titled `file.md5`, which contains only the MD5 checksum for `file`.
