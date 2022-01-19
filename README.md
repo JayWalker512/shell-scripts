@@ -7,6 +7,23 @@ Dependencies
 
 md5sum, gzip, grep, awk, ffmpeg, apcaccess
 
+Installation
+------------
+
+Install the scripts in a folder in your home directory like so:
+
+```
+cd ~
+git clone https://github.com/JayWalker512/shell-scripts
+```
+
+Then to make these scripts globally accessible in your terminal, add the following lines to your ```~/.bashrc``` file:
+
+```
+PATH="/home/yourusername/shell-scripts:${PATH}"
+export PATH
+```
+
 Docs
 ----
 
